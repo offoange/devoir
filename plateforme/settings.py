@@ -9,7 +9,10 @@ SECRET_KEY = 'django-insecure-eabm6cr$=^%(td!&dmge*qa6-+pazn2x+nfdc-fxjqkgs0$nlc
 
 
 DEBUG = False
-ALLOWED_HOSTS = ['votre-nom-environnement.elasticbeanstalk.com',"127.0.0.1", 'localhost']
+
+
+ALLOWED_HOSTS = ['*']
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
