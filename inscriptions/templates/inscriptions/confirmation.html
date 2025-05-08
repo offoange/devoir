@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  /* Styles pour la page de confirmation */
+  .confirmation-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .confirmation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07) !important;
+  }
+  
+  .confirmation-header {
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(155, 89, 182, 0.1) 100%);
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .confirmation-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+  
+  .confirmation-subtitle {
+    color: #4a90e2;
+    font-weight: 600;
+  }
+  
+  .confirmation-icon {
+    font-size: 4rem;
+    color: #38b2ac;
+    margin-bottom: 1.5rem;
+  }
+  
+  .confirmation-details {
+    padding: 2rem;
+  }
+  
+  .info-section {
+    margin-bottom: 2rem;
+  }
+  
+  .info-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-left: 5px solid #4a90e2;
+    padding-left: 12px;
+    margin-bottom: 1.25rem;
+    color: #2c3e50;
+  }
+  
+  .info-row {
+    display: flex;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .info-label {
+    font-weight: 600;
+    color: #718096;
+    width: 35%;
+  }
+  
+  .info-value {
+    color: #2d3748;
+    width: 65%;
+  }
+  
+  .document-list {
+    margin-top: 1rem;
+  }
+  
+  .document-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .document-icon {
+    color: #4a90e2;
+    margin-right: 0.75rem;
+  }
+  
+  .print-btn {
+    background: linear-gradient(135deg, #4a90e2 0%, #9b59b6 100%);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: white;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .print-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Animation d'entrée */
+  @keyframes slideInUp {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .slide-in {
+    animation: slideInUp 0.6s ease-out forwards;
+  }
+  
+  .slide-in-delay-1 {
+    animation-delay: 0.2s;
+    opacity: 0;
+  }
+  
+  .slide-in-delay-2 {
+    animation-delay: 0.4s;
+    opacity: 0;
+  }
+</style>
+
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="card border-0 shadow-lg confirmation-card slide-in">
+        <!-- Entête de confirmation -->
+        <div class="confirmation-header">
+          <div class="confirmation-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h2 class="confirmation-title">Candidature enregistrée !</h2>
+          <p class="confirmation-subtitle">Votre numéro de référence : <strong>REF-{{ candidat.id|stringformat:"06d" }}</strong></p>
+        </div>
+        
+        <!-- Détails de la candidature -->
+        <div class="confirmation-details">
+          <!-- Informations personnelles -->
+          <div class="info-section slide-in slide-in-delay-1">
+            <h3 class="info-title">
+              <i class="fas fa-user-circle me-2"></i>Vos informations
+            </h3>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="info-row">
+                  <div class="info-label">Nom</div>
+                  <div class="info-value">{{ candidat.nom }}</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-label">Prénom</div>
+                  <div class="info-value">{{ candidat.prenom }}</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-label">Date de naissance</div>
+                  <div class="info-value">{{ candidat.date_naissance|date:"d/m/Y" }}</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-row">
+                  <div class="info-label">Email</div>
+                  <div class="info-value">{{ candidat.email }}</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-label">Téléphone</div>
+                  <div class="info-value">{{ candidat.telephone }}</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-label">Date d'inscription</div>
+                  <div class="info-value">{{ candidat.date_inscription|date:"d/m/Y à H:i" }}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="info-row">
+              <div class="info-label">Adresse</div>
+              <div class="info-value">{{ candidat.adresse }}</div>
+            </div>
+          </div>
+          
+          <!-- Documents soumis -->
+          <div class="info-section slide-in slide-in-delay-2">
+            <h3 class="info-title">
+              <i class="fas fa-file-alt me-2"></i>Documents soumis
+            </h3>
+            
+            <div class="document-list">
+              {% for document in documents %}
+                <div class="document-item">
+                  <div class="document-icon">
+                    <i class="far fa-file-pdf"></i>
+                  </div>
+                  <div>{{ document.get_type_document_display }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          
+          <!-- Message de confirmation et étapes suivantes -->
+          <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+            <i class="fas fa-info-circle me-3 fa-lg"></i>
+            <div>
+              Un email de confirmation a été envoyé à <strong>{{ candidat.email }}</strong>. 
+              Veuillez conserver votre numéro de référence pour le suivi de votre candidature.
+            </div>
+          </div>
+          
+          <!-- Boutons d'action -->
+          <div class="d-flex justify-content-center mt-4">
+            <button onclick="window.print()" class="btn print-btn me-2">
+              <i class="fas fa-print me-2"></i>Imprimer le récapitulatif
+            </button>
+            <a href="{% url 'accueil' %}" class="btn btn-outline-secondary">
+              <i class="fas fa-home me-2"></i>Retour à l'accueil
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

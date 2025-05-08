@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  /* Styles personnalisés */
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #2c3e50;
+    position: relative;
+    padding-bottom: 15px;
+  }
+  
+  .page-title:after {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #4a90e2, #9b59b6);
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
+  
+  .form-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .form-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07) !important;
+  }
+  
+  .section-header {
+    font-size: 1.5rem;
+    border-left: 5px solid #4a90e2;
+    padding-left: 15px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-header i {
+    background: linear-gradient(90deg, #4a90e2, #9b59b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .form-label {
+    font-weight: 600;
+    color: #3a3a3a;
+    margin-bottom: 0.5rem;
+  }
+  
+  .input-group-text {
+    background: linear-gradient(135deg, #4a90e2 0%, #9b59b6 100%);
+    color: white;
+    border: none;
+  }
+  
+  .form-control, .form-select {
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+  }
+  
+  .form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    border-color: #4a90e2;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #4a90e2 0%, #9b59b6 100%);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, #5a9fe2 0%, #a669c6 100%);
+  }
+  
+  .alert-info {
+    background-color: rgba(74, 144, 226, 0.1);
+    border-left: 4px solid #4a90e2;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 0 8px 8px 0;
+  }
+  
+  .list-group-item {
+    padding: 0.75rem 1.25rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .list-group-item:hover {
+    background-color: rgba(74, 144, 226, 0.05);
+  }
+  
+  .file-upload-container {
+    border: 2px dashed #e2e8f0;
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .file-upload-container:hover {
+    border-color: #4a90e2;
+    background-color: rgba(74, 144, 226, 0.05);
+  }
+  
+  .file-upload-text {
+    margin-top: 10px;
+    color: #718096;
+  }
+  
+  .document-card {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  
+  .document-card-header {
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(155, 89, 182, 0.1) 100%);
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  
+  code {
+    background-color: #f8f9fa;
+    padding: 3px 6px;
+    border-radius: 4px;
+    color: #e83e8c;
+  }
+  
+  .highlight-check {
+    color: #38b2ac;
+    font-size: 1.1rem;
+  }
+  
+  /* Animation lors du chargement de la page */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+  
+  .fade-in-delay-1 {
+    animation-delay: 0.2s;
+    opacity: 0;
+  }
+  
+  .fade-in-delay-2 {
+    animation-delay: 0.4s;
+    opacity: 0;
+  }
+</style>
+
+<div class="container py-5">
+  <h2 class="page-title fade-in">Inscription au concours</h2>
+
+  <div class="row">
+    <div class="col-lg-9 mx-auto">
+      <div class="card border-0 shadow-lg form-card fade-in">
+        <div class="card-body p-4 p-lg-5">
+          <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            
+            <div class="mb-5 fade-in fade-in-delay-1">
+              <h4 class="section-header mb-4">
+                <i class="fas fa-user-circle me-2"></i>Informations personnelles
+              </h4>
+              
+              <div class="row g-4">
+                {% for field in candidat_form %}
+                  <div class="col-md-{% if field.name == 'email' or field.name == 'telephone' %}6{% elif field.name == 'adresse' %}12{% else %}6{% endif %}">
+                    <div class="form-group">
+                      <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                      {% if field.field.widget.input_type == 'select' %}
+                        <select name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-select">
+                          {{ field }}
+                        </select>
+                      {% else %}
+                        {{ field.errors }}
+                        <div class="input-group">
+                          {% if field.name == 'email' %}
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                          {% elif field.name == 'telephone' %}
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                          {% elif field.name == 'adresse' %}
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                          {% elif field.name == 'date_naissance' %}
+                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                          {% else %}
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          {% endif %}
+                          {{ field }}
+                        </div>
+                        {% if field.help_text %}
+                          <small class="form-text text-muted mt-1">{{ field.help_text }}</small>
+                        {% endif %}
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+            
+            <div class="mb-4 fade-in fade-in-delay-2">
+              <h4 class="section-header mb-4">
+                <i class="fas fa-file-archive me-2"></i>Documents requis
+              </h4>
+              
+              <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+                <i class="fas fa-info-circle me-3 fa-lg"></i>
+                <div>
+                  Veuillez téléverser un fichier ZIP contenant tous les documents requis.
+                  <strong>Important :</strong> Chaque fichier dans le ZIP doit être nommé selon le format spécifié ci-dessous.
+                </div>
+              </div>
+              
+              <div class="form-group mb-4">
+                <label for="documents_zip" class="form-label">Archive ZIP de tous vos documents</label>
+                <div class="file-upload-container" id="dropzone">
+                  <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                  <div class="file-upload-text">
+                    Glissez votre fichier ZIP ici ou cliquez pour sélectionner
+                    <div class="mt-2 small text-muted">Taille maximale: 10 Mo</div>
+                  </div>
+                  <input type="file" class="form-control d-none" id="documents_zip" name="documents_zip" >
+                </div>
+              </div>
+              
+              <div class="card document-card mb-3">
+                <div class="card-header document-card-header py-3">
+                  <i class="fas fa-list-check me-2"></i>Documents à inclure dans votre archive ZIP
+                </div>
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                    {% for field in document_form %}
+                    <li class="list-group-item border-0 ps-0 py-3">
+                      <i class="fas fa-check-circle highlight-check me-2"></i>
+                      <strong>{{ field.label }}</strong>
+                      <small class="text-muted d-block mt-1 ms-4">
+                        Nom de fichier requis : <code>{{ field.name }}.pdf</code>
+                        {% if field.help_text %}
+                          <br>{{ field.help_text }}
+                        {% endif %}
+                      </small>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2 col-md-8 mx-auto mt-5">
+              <button type="submit" class="btn btn-primary btn-lg py-3">
+                <i class="fas fa-paper-plane me-2"></i>Soumettre ma candidature
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <div class="text-center mt-4 text-muted small">
+        <i class="fas fa-lock me-1"></i> Vos données sont protégées et sécurisées
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Script pour activer la validation des formulaires Bootstrap
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+  
+  // Script pour le téléversement de fichiers
+  document.addEventListener('DOMContentLoaded', function() {
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('documents_zip');
+    
+    // Déclencher le clic sur l'input quand on clique sur la zone
+    dropzone.addEventListener('click', function() {
+      fileInput.click();
+    });
+    
+    // Mettre à jour l'interface lorsqu'un fichier est sélectionné
+    fileInput.addEventListener('change', function() {
+      updateFileDisplay(this.files);
+    });
+    
+    // Prendre en charge le glisser-déposer
+    dropzone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      dropzone.classList.add('border-primary');
+    });
+    
+    dropzone.addEventListener('dragleave', function() {
+      dropzone.classList.remove('border-primary');
+    });
+    
+    dropzone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      dropzone.classList.remove('border-primary');
+      
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        updateFileDisplay(e.dataTransfer.files);
+      }
+    });
+    
+    function updateFileDisplay(files) {
+      if (files.length > 0) {
+        const uploadText = dropzone.querySelector('.file-upload-text');
+        uploadText.innerHTML = `<strong>${files[0].name}</strong> <br><span class="text-success">(${(files[0].size / 1024 / 1024).toFixed(2)} Mo)</span>`;
+        dropzone.classList.add('border-success');
+        dropzone.classList.remove('border-danger');
+      }
+    }
+  });
+</script>
+{% endblock %}
+
+
+
+
+
+
